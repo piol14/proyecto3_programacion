@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Color;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -14,10 +15,22 @@ import java.awt.Component;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.UIManager;
+import java.awt.SystemColor;
 
 public class App {
+	
+	static final int LONGITUD_BTN_GUARDAR =25;
+	static final int ALTURA_BTN_GUARDAR =25;
+	
+	static final int LONGITUD_BTN_ACTUALIZAR=25;
+	static final int ALTURA_BTN_ACTUALIZAR =20;
+	
+	static final int LONGITUD_BTN_BORRAR =25;
+	static final int ALTURA_BTN_BORRAR =25;
+	
 
 	private JFrame frameAlmacen;
 	private JTable tableProductos;
@@ -57,14 +70,14 @@ public class App {
 		frameAlmacen = new JFrame();
 		frameAlmacen.getContentPane().setBackground(new Color(102, 204, 153));
 		frameAlmacen.setBackground(UIManager.getColor("OptionPane.questionDialog.titlePane.background"));
-		frameAlmacen.setBounds(100, 100, 674, 826);
+		frameAlmacen.setBounds(100, 100, 674, 763);
 		frameAlmacen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frameAlmacen.getContentPane().setLayout(null);
 		
-		JLabel lblTitulo = new JLabel("Almacenes Ausias");
+		JLabel lblTitulo = new JLabel("El Rincón de los Sabores");
 		lblTitulo.setBackground(new Color(0, 153, 153));
 		lblTitulo.setFont(new Font("Dialog", Font.BOLD, 25));
-		lblTitulo.setBounds(200, 0, 295, 52);
+		lblTitulo.setBounds(162, 33, 403, 31);
 		frameAlmacen.getContentPane().add(lblTitulo);
 		
         DefaultTableModel modelTabla = new DefaultTableModel() {
@@ -175,15 +188,31 @@ public class App {
 		frameAlmacen.getContentPane().add(rdbtnMostrarProductosDe);
 		
 		JButton btnGuardar = new JButton("Guardar");
-		btnGuardar.setBounds(32, 676, 117, 25);
+		btnGuardar.setBackground(SystemColor.window);
+		btnGuardar.setBounds(32, 676, 121, 25);
+
+		ImageIcon imagenGuardar = new ImageIcon(App.class.getResource("/imagenes/guardar.png"));
+		Image imagenRedimensionada = imagenGuardar.getImage().getScaledInstance(LONGITUD_BTN_GUARDAR, ALTURA_BTN_GUARDAR, java.awt.Image.SCALE_SMOOTH);
+		btnGuardar.setIcon(new ImageIcon(imagenRedimensionada));
 		frameAlmacen.getContentPane().add(btnGuardar);
 		
+		
 		JButton btnActualizar = new JButton("Actualizar");
-		btnActualizar.setBounds(289, 676, 117, 25);
+		btnActualizar.setBackground(SystemColor.window);
+		btnActualizar.setBounds(286, 676, 121, 25);
+		
+		ImageIcon imagenActualizar = new ImageIcon(App.class.getResource("/imagenes/actualizar.png"));
+		Image imagenRedimensionada2 = imagenActualizar.getImage().getScaledInstance(LONGITUD_BTN_ACTUALIZAR, ALTURA_BTN_ACTUALIZAR, java.awt.Image.SCALE_SMOOTH);
+		btnActualizar.setIcon(new ImageIcon(imagenRedimensionada2));
 		frameAlmacen.getContentPane().add(btnActualizar);
 		
 		JButton btnBorrar = new JButton("Borrar");
-		btnBorrar.setBounds(521, 676, 117, 25);
+		btnBorrar.setBackground(SystemColor.window);
+		btnBorrar.setBounds(517, 676, 121, 25);
+		
+		ImageIcon imagenBorrar = new ImageIcon(App.class.getResource("/imagenes/BORRAR.png"));
+		Image imagenRedimensionada3 = imagenBorrar.getImage().getScaledInstance(LONGITUD_BTN_BORRAR, ALTURA_BTN_BORRAR, java.awt.Image.SCALE_SMOOTH);
+		btnBorrar.setIcon(new ImageIcon(imagenRedimensionada3));
 		frameAlmacen.getContentPane().add(btnBorrar);
 		
 		JLabel lblMostrarDatos = new JLabel("MOSTRAR DATOS");
