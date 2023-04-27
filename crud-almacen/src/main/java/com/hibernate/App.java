@@ -19,6 +19,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.UIManager;
 import java.awt.SystemColor;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class App {
 	
@@ -36,7 +40,6 @@ public class App {
 	private JTable tableProductos;
 	private JTextField txtId;
 	private JTextField txtNombre;
-	private JTextField txtCategoria;
 	private JTextField txtPrecio;
 	private JTextField txtStock;
 
@@ -75,8 +78,9 @@ public class App {
 		frameAlmacen.getContentPane().setLayout(null);
 		
 		JLabel lblTitulo = new JLabel("El Rincón de los Sabores");
+		lblTitulo.setForeground(new Color(245, 222, 179));
 		lblTitulo.setBackground(new Color(0, 153, 153));
-		lblTitulo.setFont(new Font("Dialog", Font.BOLD, 25));
+		lblTitulo.setFont(new Font("Nimbus Mono PS", Font.BOLD, 25));
 		lblTitulo.setBounds(162, 33, 403, 31);
 		frameAlmacen.getContentPane().add(lblTitulo);
 		
@@ -144,11 +148,6 @@ public class App {
 		frameAlmacen.getContentPane().add(txtNombre);
 		txtNombre.setColumns(10);
 		
-		txtCategoria = new JTextField();
-		txtCategoria.setBounds(187, 422, 261, 19);
-		frameAlmacen.getContentPane().add(txtCategoria);
-		txtCategoria.setColumns(10);
-		
 		txtPrecio = new JTextField();
 		txtPrecio.setText("");
 		txtPrecio.setBounds(187, 448, 151, 19);
@@ -167,6 +166,12 @@ public class App {
 		frameAlmacen.getContentPane().add(rdbtnMostrarTodosLos);
 		
 		JComboBox comboBoxSeleccionarCategoria = new JComboBox();
+		comboBoxSeleccionarCategoria.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
+		
 		comboBoxSeleccionarCategoria.setBounds(408, 591, 98, 24);
 		frameAlmacen.getContentPane().add(comboBoxSeleccionarCategoria);
 		
@@ -219,6 +224,17 @@ public class App {
 		lblMostrarDatos.setFont(new Font("Dialog", Font.BOLD, 20));
 		lblMostrarDatos.setBounds(42, 506, 284, 31);
 		frameAlmacen.getContentPane().add(lblMostrarDatos);
+		
+		JComboBox comboBoxCategoria = new JComboBox();
+		comboBoxCategoria.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+		});
+		
+		comboBoxCategoria.setBounds(187, 422, 261, 19);
+		frameAlmacen.getContentPane().add(comboBoxCategoria);
 		
 		
 		
