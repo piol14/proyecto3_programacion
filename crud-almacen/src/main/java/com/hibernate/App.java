@@ -55,7 +55,7 @@ public class App {
 	 */
 	private void initialize() {
 		frameAlmacen = new JFrame();
-		frameAlmacen.getContentPane().setBackground(UIManager.getColor("OptionPane.questionDialog.titlePane.background"));
+		frameAlmacen.getContentPane().setBackground(new Color(102, 204, 153));
 		frameAlmacen.setBackground(UIManager.getColor("OptionPane.questionDialog.titlePane.background"));
 		frameAlmacen.setBounds(100, 100, 674, 826);
 		frameAlmacen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -148,6 +148,7 @@ public class App {
 		txtStock.setColumns(10);
 		
 		JRadioButton rdbtnMostrarTodosLos = new JRadioButton("Mostrar todos los productos");
+		rdbtnMostrarTodosLos.setBackground(new Color(102, 204, 153));
 		rdbtnMostrarTodosLos.setFont(new Font("Dialog", Font.BOLD, 15));
 		rdbtnMostrarTodosLos.setBounds(42, 544, 284, 23);
 		frameAlmacen.getContentPane().add(rdbtnMostrarTodosLos);
@@ -162,11 +163,13 @@ public class App {
 		frameAlmacen.getContentPane().add(lblSeleccionarCategoria);
 		
 		JRadioButton rdbtnMostrarProductosPor = new JRadioButton("Mostrar productos por categoría");
+		rdbtnMostrarProductosPor.setBackground(new Color(102, 204, 153));
 		rdbtnMostrarProductosPor.setFont(new Font("Dialog", Font.BOLD, 15));
 		rdbtnMostrarProductosPor.setBounds(42, 571, 324, 23);
 		frameAlmacen.getContentPane().add(rdbtnMostrarProductosPor);
 		
 		JRadioButton rdbtnMostrarProductosDe = new JRadioButton("Mostrar productos de los que ya no quede unidades");
+		rdbtnMostrarProductosDe.setBackground(new Color(102, 204, 153));
 		rdbtnMostrarProductosDe.setFont(new Font("Dialog", Font.BOLD, 15));
 		rdbtnMostrarProductosDe.setBounds(42, 623, 495, 23);
 		frameAlmacen.getContentPane().add(rdbtnMostrarProductosDe);
