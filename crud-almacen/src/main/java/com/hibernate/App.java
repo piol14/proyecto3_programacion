@@ -22,10 +22,10 @@ import java.awt.SystemColor;
 
 public class App {
 	
-	static final int LONGITUD_BTN_GUARDAR =25;
-	static final int ALTURA_BTN_GUARDAR =25;
+	static final int LONGITUD_BTN_GUARDAR =20;
+	static final int ALTURA_BTN_GUARDAR =20;
 	
-	static final int LONGITUD_BTN_ACTUALIZAR=25;
+	static final int LONGITUD_BTN_ACTUALIZAR=20;
 	static final int ALTURA_BTN_ACTUALIZAR =20;
 	
 	static final int LONGITUD_BTN_BORRAR =25;
@@ -188,7 +188,7 @@ public class App {
 		frameAlmacen.getContentPane().add(rdbtnMostrarProductosDe);
 		
 		JButton btnGuardar = new JButton("Guardar");
-		btnGuardar.setBackground(SystemColor.window);
+		btnGuardar.setBackground(new Color(245, 222, 179));
 		btnGuardar.setBounds(32, 676, 121, 25);
 
 		ImageIcon imagenGuardar = new ImageIcon(App.class.getResource("/imagenes/guardar.png"));
@@ -198,8 +198,8 @@ public class App {
 		
 		
 		JButton btnActualizar = new JButton("Actualizar");
-		btnActualizar.setBackground(SystemColor.window);
-		btnActualizar.setBounds(286, 676, 121, 25);
+		btnActualizar.setBackground(new Color(245, 222, 179));
+		btnActualizar.setBounds(256, 676, 151, 25);
 		
 		ImageIcon imagenActualizar = new ImageIcon(App.class.getResource("/imagenes/actualizar.png"));
 		Image imagenRedimensionada2 = imagenActualizar.getImage().getScaledInstance(LONGITUD_BTN_ACTUALIZAR, ALTURA_BTN_ACTUALIZAR, java.awt.Image.SCALE_SMOOTH);
@@ -207,10 +207,10 @@ public class App {
 		frameAlmacen.getContentPane().add(btnActualizar);
 		
 		JButton btnBorrar = new JButton("Borrar");
-		btnBorrar.setBackground(SystemColor.window);
+		btnBorrar.setBackground(new Color(245, 222, 179));
 		btnBorrar.setBounds(517, 676, 121, 25);
 		
-		ImageIcon imagenBorrar = new ImageIcon(App.class.getResource("/imagenes/BORRAR.png"));
+		ImageIcon imagenBorrar = new ImageIcon(App.class.getResource("/imagenes/borrar.png"));
 		Image imagenRedimensionada3 = imagenBorrar.getImage().getScaledInstance(LONGITUD_BTN_BORRAR, ALTURA_BTN_BORRAR, java.awt.Image.SCALE_SMOOTH);
 		btnBorrar.setIcon(new ImageIcon(imagenRedimensionada3));
 		frameAlmacen.getContentPane().add(btnBorrar);
