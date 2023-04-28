@@ -32,11 +32,11 @@ public class Producto {
 	private Categoria categoria;
 
 	public Producto() {
-
+		super();
 	}
 
 	public Producto(String nombre, int precio, int existencias, Categoria categoria) {
-		super();
+		
 		this.nombre = nombre;
 		this.precio = precio;
 		this.existencias = existencias;

@@ -26,4 +26,18 @@ public class CategoriaDAO {
 				}
 				return categorias;
 			}
+			public Categoria selectCategoriaById(int id) {
+				Transaction transaction = null;
+			Categoria cg = null;
+				try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+					transaction = session.beginTransaction();
+					cg = session.get(Categoria.class, id);
+					transaction.commit();
+				} catch (Exception e) {
+					if (transaction != null) {
+						transaction.rollback();
+					}
+				}
+				return cg;
+			}
 }

@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
 import java.awt.Font;
@@ -15,6 +16,7 @@ import javax.swing.table.TableModel;
 
 import com.hibernate.dao.CategoriaDAO;
 import com.hibernate.dao.ProductoDAO;
+import com.hibernate.model.Categoria;
 import com.hibernate.model.Producto;
 
 
@@ -187,11 +189,18 @@ public class App {
 		frameAlmacen.getContentPane().add(rdbtnMostrarTodosLos);
 		
 		JComboBox comboBoxSeleccionarCategoria = new JComboBox();
-		comboBoxSeleccionarCategoria.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
+		
+		
+		
+		List<Categoria> selectCategoria = categoriaDAO.selectAllCategoria();
+		for (Categoria cg : selectCategoria) {
+		    Object[] fila = {cg.getNombreCategoria()};
+		    comboBoxSeleccionarCategoria.addItem(fila[0]);
+		}
+
+				
+			
+		
 		
 		comboBoxSeleccionarCategoria.setBounds(408, 591, 98, 24);
 		frameAlmacen.getContentPane().add(comboBoxSeleccionarCategoria);
@@ -212,8 +221,31 @@ public class App {
 		rdbtnMostrarProductosDe.setFont(new Font("Dialog", Font.BOLD, 15));
 		rdbtnMostrarProductosDe.setBounds(42, 623, 495, 23);
 		frameAlmacen.getContentPane().add(rdbtnMostrarProductosDe);
-		
+		JComboBox comboBoxCategoria = new JComboBox();
 		JButton btnGuardar = new JButton("Guardar");
+		btnGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			    try {
+				String nombre = txtNombre.getText();
+			    
+			    int indice = comboBoxCategoria.getSelectedIndex()+1;
+			    Categoria categoria =categoriaDAO.selectCategoriaById(indice);
+			    int precio = Integer.parseInt(txtPrecio.getText());
+			    int existencias = Integer.parseInt(txtStock.getText());
+			    Producto producto1 = new Producto(nombre, precio, existencias, categoria);
+			    productoDAO.insertProducto(producto1);
+			    modelTabla.setRowCount(0);
+			    List<Producto> productoSelect = productoDAO.selectAllProductos();
+			    for (Producto pr : productoSelect) {
+			        Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), pr.getCategoria().getIdCategoria() };
+			        modelTabla.addRow(fila);
+			    }
+			    JOptionPane.showMessageDialog(null, "Producto añadido");
+			}catch(NumberFormatException e1) {
+				   JOptionPane.showMessageDialog(null,  "¡Error hay casillas vacías o datos mal introducidos!");
+			}
+			}
+		});
 		btnGuardar.setBackground(new Color(245, 222, 179));
 		btnGuardar.setBounds(32, 676, 121, 25);
 
@@ -246,31 +278,30 @@ public class App {
 		lblMostrarDatos.setBounds(42, 506, 284, 31);
 		frameAlmacen.getContentPane().add(lblMostrarDatos);
 		
-		JComboBox comboBoxCategoria = new JComboBox();
-		comboBoxCategoria.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				
-			}
-		});
 		
+		
+			List<Categoria> Categoria = categoriaDAO.selectAllCategoria();
+			for (Categoria cg : Categoria) {
+			    Object[] fila = {cg.getNombreCategoria()};
+			    comboBoxCategoria.addItem(fila[0]);
+			}
 		comboBoxCategoria.setBounds(187, 422, 261, 19);
 		frameAlmacen.getContentPane().add(comboBoxCategoria);
 		
 		tableProductos.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				int índice = tableProductos.getSelectedRow();
-				TableModel model = tableProductos.getModel();
-				txtId.setText(model.getValueAt(índice, 0).toString());
-				txtNombre.setText(model.getValueAt(índice, 1).toString());
-				txtPrecio.setText(model.getValueAt(índice, 2).toString());
-				txtStock.setText(model.getValueAt(índice, 3).toString());
-				comboBoxCategoria.setSelectedItem(model.getValueAt(índice, 4).toString());
+			    int índice = tableProductos.getSelectedRow();
+			    TableModel model = tableProductos.getModel();
+			    txtId.setText(model.getValueAt(índice, 0).toString());
+			    txtNombre.setText(model.getValueAt(índice, 1).toString());
+			    txtPrecio.setText(model.getValueAt(índice, 2).toString());
+			    txtStock.setText(model.getValueAt(índice, 3).toString());
+			    Object valorSeleccionado = model.getValueAt(índice, 4); // obtiene el valor de la columna de la categoría
+			    comboBoxCategoria.setSelectedIndex((int) valorSeleccionado-1);
 			}
-		});
-		
-		
-		
-	}
+	});
+	
+}
+
 }

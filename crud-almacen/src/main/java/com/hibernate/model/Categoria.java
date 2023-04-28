@@ -37,7 +37,7 @@ public class Categoria {
 		this.idCategoria = idCategoria;
 	}
 
-	public String getNombre() {
+	public String getNombreCategoria() {
 		return nombre;
 	}
 
