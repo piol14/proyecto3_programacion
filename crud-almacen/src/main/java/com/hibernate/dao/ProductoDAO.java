@@ -107,4 +107,18 @@ public class ProductoDAO {
 			return productos;
 		}
 
+		public List<Producto> selectProductosSinStock() {
+		    Transaction transaction = null;
+		    List<Producto> productos = null;
+		    try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+		        transaction = session.beginTransaction();
+		        productos = session.createQuery("FROM Producto WHERE  existencias = 0", Producto.class).getResultList();
+		        transaction.commit();
+		    } catch (Exception e) {
+		        if (transaction != null) {
+		            transaction.rollback();
+		        }
+		    }
+		    return productos;
+		}
 }
