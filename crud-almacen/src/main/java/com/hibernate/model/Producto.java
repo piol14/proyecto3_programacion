@@ -83,44 +83,7 @@ public class Producto {
 		this.categoria = categoria;
 	}
 
-}
 
-@Entity
-@Table(name = "categoria")
-class Categoria {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "idCategoria")
-	private int idCategoria;
-
-	@Column(name = "nombre")
-	private String nombre;
-
-	public Categoria() {
-
-	}
-
-	public Categoria(String nombre) {
-		super();
-		this.nombre = nombre;
-	}
-
-	public int getIdCategoria() {
-		return idCategoria;
-	}
-
-	public void setIdCategoria(int idCategoria) {
-		this.idCategoria = idCategoria;
-	}
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
 
 }
 

@@ -11,6 +11,13 @@ import java.awt.Image;
 import java.awt.Color;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+import com.hibernate.dao.CategoriaDAO;
+import com.hibernate.dao.ProductoDAO;
+import com.hibernate.model.Producto;
+
+
 import java.awt.Component;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
@@ -23,6 +30,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 public class App {
 	
@@ -70,6 +78,10 @@ public class App {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
+		ProductoDAO productoDAO = new ProductoDAO ();
+		CategoriaDAO categoriaDAO = new CategoriaDAO ();
+		
 		frameAlmacen = new JFrame();
 		frameAlmacen.getContentPane().setBackground(new Color(102, 204, 153));
 		frameAlmacen.setBackground(UIManager.getColor("OptionPane.questionDialog.titlePane.background"));
@@ -92,16 +104,25 @@ public class App {
 		}
 		};
 		
-		modelTabla.addColumn("Id");
-		modelTabla.addColumn("Nombre");
-		modelTabla.addColumn("Precio");
-		modelTabla.addColumn("Existencias");
-		modelTabla.addColumn("Categoria");
+		modelTabla.addColumn("idproducto");
+		modelTabla.addColumn("nombre");
+		modelTabla.addColumn("precio");
+		modelTabla.addColumn("existencias");
+		modelTabla.addColumn("categoria_id");
 		
 		tableProductos = new JTable(modelTabla);
+		
 		tableProductos.setBounds(26, 251, 489, -159);
 		frameAlmacen.getContentPane().add(tableProductos);
 		
+		
+		List<Producto> selectProducto = productoDAO.selectAllProductos();
+		for (Producto pr : selectProducto) {
+		    Object[] fila = { pr.getIdProducto(), pr.getNombre() , pr.getPrecio() , pr.getExistencias() , pr.getCategoria().getIdCategoria()};
+		    modelTabla.addRow(fila);
+		}
+		
+
 		
 		JScrollPane scrollPaneProductos = new JScrollPane(tableProductos);
 		scrollPaneProductos.setBounds(32, 76, 606, 220);
@@ -236,7 +257,18 @@ public class App {
 		comboBoxCategoria.setBounds(187, 422, 261, 19);
 		frameAlmacen.getContentPane().add(comboBoxCategoria);
 		
-		
+		tableProductos.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int índice = tableProductos.getSelectedRow();
+				TableModel model = tableProductos.getModel();
+				txtId.setText(model.getValueAt(índice, 0).toString());
+				txtNombre.setText(model.getValueAt(índice, 1).toString());
+				txtPrecio.setText(model.getValueAt(índice, 2).toString());
+				txtStock.setText(model.getValueAt(índice, 3).toString());
+				comboBoxCategoria.setSelectedItem(model.getValueAt(índice, 4).toString());
+			}
+		});
 		
 		
 		
