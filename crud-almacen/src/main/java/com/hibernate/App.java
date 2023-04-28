@@ -24,6 +24,7 @@ import java.awt.Component;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.UIManager;
@@ -33,6 +34,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class App {
 	
@@ -52,6 +55,8 @@ public class App {
 	private JTextField txtNombre;
 	private JTextField txtPrecio;
 	private JTextField txtStock;
+	
+	ButtonGroup g1 = new ButtonGroup();
 
 	/**
 	 * Launch the application.
@@ -182,27 +187,55 @@ public class App {
 		frameAlmacen.getContentPane().add(txtStock);
 		txtStock.setColumns(10);
 		
-		JRadioButton rdbtnMostrarTodosLos = new JRadioButton("Mostrar todos los productos");
-		rdbtnMostrarTodosLos.setBackground(new Color(102, 204, 153));
-		rdbtnMostrarTodosLos.setFont(new Font("Dialog", Font.BOLD, 15));
-		rdbtnMostrarTodosLos.setBounds(42, 544, 284, 23);
-		frameAlmacen.getContentPane().add(rdbtnMostrarTodosLos);
+		JRadioButton rdbtnMostrarTodos = new JRadioButton("Mostrar todos los productos",true);
+		rdbtnMostrarTodos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+
+				modelTabla.setRowCount(0);
+				List<Producto> selectProducto = productoDAO.selectAllProductos();
+				for (Producto pr : selectProducto) {
+				    Object[] fila = { pr.getIdProducto(), pr.getNombre() , pr.getPrecio() , pr.getExistencias() , pr.getCategoria().getIdCategoria()};
+				    modelTabla.addRow(fila);
+				}
+				
+			}
+		});
+		rdbtnMostrarTodos.setBackground(new Color(102, 204, 153));
+		rdbtnMostrarTodos.setFont(new Font("Dialog", Font.BOLD, 15));
+		rdbtnMostrarTodos.setBounds(42, 544, 284, 23);
+		
+		frameAlmacen.getContentPane().add(rdbtnMostrarTodos);
 		
 		JComboBox comboBoxSeleccionarCategoria = new JComboBox();
+		
+		comboBoxSeleccionarCategoria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				modelTabla.setRowCount(0);
+				   int indice = comboBoxSeleccionarCategoria.getSelectedIndex()+1;
+				    Categoria categoria =categoriaDAO.selectCategoriaById(indice);
+				List<Producto> selectProducto = productoDAO.selectProductoByCategoria(categoria);
+				for (Producto pr : selectProducto) {
+				    Object[] fila = { pr.getIdProducto(), pr.getNombre() , pr.getPrecio() , pr.getExistencias() , pr.getCategoria().getIdCategoria()};
+				    modelTabla.addRow(fila);
+				}
+			}
+		});
+		
+		comboBoxSeleccionarCategoria.setEnabled(false);
 		
 		
 		
 		List<Categoria> selectCategoria = categoriaDAO.selectAllCategoria();
 		for (Categoria cg : selectCategoria) {
-		    Object[] fila = {cg.getNombreCategoria()};
-		    comboBoxSeleccionarCategoria.addItem(fila[0]);
+		  comboBoxSeleccionarCategoria.addItem(cg.getNombreCategoria());
 		}
 
 				
 			
 		
 		
-		comboBoxSeleccionarCategoria.setBounds(408, 591, 98, 24);
+		comboBoxSeleccionarCategoria.setBounds(408, 591, 215, 24);
 		frameAlmacen.getContentPane().add(comboBoxSeleccionarCategoria);
 		
 		JLabel lblSeleccionarCategoria = new JLabel("Seleccionar Categoria");
@@ -210,18 +243,36 @@ public class App {
 		lblSeleccionarCategoria.setBounds(157, 596, 188, 19);
 		frameAlmacen.getContentPane().add(lblSeleccionarCategoria);
 		
-		JRadioButton rdbtnMostrarProductosPor = new JRadioButton("Mostrar productos por categoría");
-		rdbtnMostrarProductosPor.setBackground(new Color(102, 204, 153));
-		rdbtnMostrarProductosPor.setFont(new Font("Dialog", Font.BOLD, 15));
-		rdbtnMostrarProductosPor.setBounds(42, 571, 324, 23);
-		frameAlmacen.getContentPane().add(rdbtnMostrarProductosPor);
+		JRadioButton rdbtnMostrarProductosCategoria = new JRadioButton("Mostrar productos por categoría");
+		rdbtnMostrarProductosCategoria.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				
+				if(rdbtnMostrarProductosCategoria.isSelected()) {
+					comboBoxSeleccionarCategoria.setEnabled(true);
+				}else {
+					comboBoxSeleccionarCategoria.setEnabled(false);
+				}
+			}
+		});
 		
-		JRadioButton rdbtnMostrarProductosDe = new JRadioButton("Mostrar productos de los que ya no quede unidades");
-		rdbtnMostrarProductosDe.setBackground(new Color(102, 204, 153));
-		rdbtnMostrarProductosDe.setFont(new Font("Dialog", Font.BOLD, 15));
-		rdbtnMostrarProductosDe.setBounds(42, 623, 495, 23);
-		frameAlmacen.getContentPane().add(rdbtnMostrarProductosDe);
+		rdbtnMostrarProductosCategoria.setBackground(new Color(102, 204, 153));
+		rdbtnMostrarProductosCategoria.setFont(new Font("Dialog", Font.BOLD, 15));
+		rdbtnMostrarProductosCategoria.setBounds(42, 571, 324, 23);
+		frameAlmacen.getContentPane().add(rdbtnMostrarProductosCategoria);
+		
+		JRadioButton rdbtnMostrarProductosSinUnidades = new JRadioButton("Mostrar productos de los que ya no quede unidades");
+		rdbtnMostrarProductosSinUnidades.setBackground(new Color(102, 204, 153));
+		rdbtnMostrarProductosSinUnidades.setFont(new Font("Dialog", Font.BOLD, 15));
+		rdbtnMostrarProductosSinUnidades.setBounds(42, 623, 495, 23);
+		frameAlmacen.getContentPane().add(rdbtnMostrarProductosSinUnidades);
+		g1.add(rdbtnMostrarProductosCategoria);
+		g1.add(rdbtnMostrarProductosSinUnidades);
+		g1.add(rdbtnMostrarTodos);
+		
+		
 		JComboBox comboBoxCategoria = new JComboBox();
+		
+		
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -265,6 +316,27 @@ public class App {
 		frameAlmacen.getContentPane().add(btnActualizar);
 		
 		JButton btnBorrar = new JButton("Borrar");
+		btnBorrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					
+					int filaSeleccionada = tableProductos.getSelectedRow();
+					int idProducto = (int)tableProductos.getValueAt(filaSeleccionada, 0);
+					productoDAO.deleteProducto(idProducto);
+					
+					modelTabla.removeRow(filaSeleccionada);
+					JOptionPane.showMessageDialog(null, "Producto borrado correctamente");
+					txtNombre.setText("");
+					txtPrecio.setText("");
+					txtStock.setText("");
+					txtId.setText("");
+					
+					
+					}catch(ArrayIndexOutOfBoundsException e1) {
+						JOptionPane.showMessageDialog(null, "No hay ningun producto o no se ha seleccionado ninguno");
+					}
+			}
+		});
 		btnBorrar.setBackground(new Color(245, 222, 179));
 		btnBorrar.setBounds(517, 676, 121, 25);
 		
@@ -279,13 +351,11 @@ public class App {
 		frameAlmacen.getContentPane().add(lblMostrarDatos);
 		
 		
-		
 			List<Categoria> Categoria = categoriaDAO.selectAllCategoria();
 			for (Categoria cg : Categoria) {
-			    Object[] fila = {cg.getNombreCategoria()};
-			    comboBoxCategoria.addItem(fila[0]);
+				comboBoxCategoria.addItem(cg.getNombreCategoria());
 			}
-		comboBoxCategoria.setBounds(187, 422, 261, 19);
+		comboBoxCategoria.setBounds(187, 422, 215, 19);
 		frameAlmacen.getContentPane().add(comboBoxCategoria);
 		
 		tableProductos.addMouseListener(new MouseAdapter() {

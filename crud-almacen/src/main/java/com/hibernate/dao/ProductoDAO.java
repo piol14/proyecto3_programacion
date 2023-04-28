@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
+import com.hibernate.model.Categoria;
 
 import com.hibernate.model.Producto;
 import com.hibernate.util.HibernateUtil;
@@ -88,5 +91,20 @@ public class ProductoDAO {
 			return productos;
 		}
 		
-	
+		public List<Producto> selectProductoByCategoria (Categoria categoria) {
+			Transaction transaction = null;
+			List<Producto> productos= null;
+			try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+				transaction = session.beginTransaction();
+				Query<Producto> query=session.createQuery("FROM Producto  WHERE categoria = :categoriaParam",Producto.class);
+				query.setParameter("categoriaParam", categoria);
+				 productos=query.getResultList();
+			} catch (Exception e) {
+				if (transaction != null) {
+					transaction.rollback();
+				}
+			}
+			return productos;
+		}
+
 }
