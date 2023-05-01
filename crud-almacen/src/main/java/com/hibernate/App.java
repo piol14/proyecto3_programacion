@@ -39,14 +39,14 @@ import java.awt.event.ItemEvent;
 
 public class App {
 	
-	static final int LONGITUD_BTN_GUARDAR =20;
-	static final int ALTURA_BTN_GUARDAR =20;
+	static final int LONGITUD_BTN_GUARDAR =18;
+	static final int ALTURA_BTN_GUARDAR =18;
 	
 	static final int LONGITUD_BTN_ACTUALIZAR=20;
 	static final int ALTURA_BTN_ACTUALIZAR =20;
 	
-	static final int LONGITUD_BTN_BORRAR =25;
-	static final int ALTURA_BTN_BORRAR =25;
+	static final int LONGITUD_BTN_BORRAR =20;
+	static final int ALTURA_BTN_BORRAR =20;
 	
 
 	private JFrame frameAlmacen;
@@ -90,16 +90,16 @@ public class App {
 		CategoriaDAO categoriaDAO = new CategoriaDAO ();
 		
 		frameAlmacen = new JFrame();
-		frameAlmacen.getContentPane().setBackground(new Color(102, 204, 153));
+		frameAlmacen.getContentPane().setBackground(new Color(152, 224, 181));
 		frameAlmacen.setBackground(UIManager.getColor("OptionPane.questionDialog.titlePane.background"));
 		frameAlmacen.setBounds(100, 100, 674, 763);
 		frameAlmacen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frameAlmacen.getContentPane().setLayout(null);
 		
 		JLabel lblTitulo = new JLabel("El Rincón de los Sabores");
-		lblTitulo.setForeground(new Color(245, 222, 179));
+		lblTitulo.setForeground(new Color(255, 153, 102));
 		lblTitulo.setBackground(new Color(0, 153, 153));
-		lblTitulo.setFont(new Font("Nimbus Mono PS", Font.BOLD, 25));
+		lblTitulo.setFont(new Font("Dialog", Font.BOLD | Font.ITALIC, 25));
 		lblTitulo.setBounds(162, 33, 403, 31);
 		frameAlmacen.getContentPane().add(lblTitulo);
 		
@@ -187,6 +187,13 @@ public class App {
 		frameAlmacen.getContentPane().add(txtStock);
 		txtStock.setColumns(10);
 		
+		JLabel lblImagen = new JLabel();
+		lblImagen.setBounds(491, 428, 46, 14);
+		ImageIcon imagen = new ImageIcon(App.class.getResource("/imagenes/guardar.png"));
+		Image imagenRedimensionada4 = imagen.getImage().getScaledInstance(LONGITUD_BTN_GUARDAR, ALTURA_BTN_GUARDAR, java.awt.Image.SCALE_SMOOTH);
+		lblImagen.setIcon(new ImageIcon(imagenRedimensionada4));
+		frameAlmacen.getContentPane().add(lblImagen);
+		
 		JRadioButton rdbtnMostrarTodos = new JRadioButton("Mostrar todos los productos",true);
 		rdbtnMostrarTodos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -205,7 +212,7 @@ public class App {
 				
 			}
 		});
-		rdbtnMostrarTodos.setBackground(new Color(102, 204, 153));
+		rdbtnMostrarTodos.setBackground(new Color(152, 224, 181));
 		rdbtnMostrarTodos.setFont(new Font("Dialog", Font.BOLD, 15));
 		rdbtnMostrarTodos.setBounds(42, 544, 284, 23);
 		
@@ -287,7 +294,7 @@ public class App {
 			
 		});
 		
-		rdbtnMostrarProductosCategoria.setBackground(new Color(102, 204, 153));
+		rdbtnMostrarProductosCategoria.setBackground(new Color(152, 224, 181));
 		rdbtnMostrarProductosCategoria.setFont(new Font("Dialog", Font.BOLD, 15));
 		rdbtnMostrarProductosCategoria.setBounds(42, 571, 324, 23);
 		frameAlmacen.getContentPane().add(rdbtnMostrarProductosCategoria);
@@ -313,7 +320,7 @@ public class App {
 		    
 		});
 		
-		rdbtnMostrarProductosSinUnidades.setBackground(new Color(102, 204, 153));
+		rdbtnMostrarProductosSinUnidades.setBackground(new Color(152, 224, 181));
 		rdbtnMostrarProductosSinUnidades.setFont(new Font("Dialog", Font.BOLD, 15));
 		rdbtnMostrarProductosSinUnidades.setBounds(42, 623, 495, 23);
 		frameAlmacen.getContentPane().add(rdbtnMostrarProductosSinUnidades);
@@ -333,7 +340,6 @@ public class App {
 			    
 			    int indice = comboBoxCategoria.getSelectedIndex()+1;
 			    Categoria categoria =categoriaDAO.selectCategoriaById(indice);
-			    String nombreCategoria = (String) comboBoxCategoria.getSelectedItem();
 			    int precio = Integer.parseInt(txtPrecio.getText());
 			    int existencias = Integer.parseInt(txtStock.getText());
 			    Producto producto1 = new Producto(nombre, precio, existencias, categoria);
@@ -341,7 +347,7 @@ public class App {
 			    modelTabla.setRowCount(0);
 			    List<Producto> productoSelect = productoDAO.selectAllProductos();
 			    for (Producto pr : productoSelect) {
-			        Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), nombreCategoria };
+			        Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), pr.getCategoria().getIdCategoria() };
 			        modelTabla.addRow(fila);
 			    }
 			    JOptionPane.showMessageDialog(null, "Producto añadido");
@@ -368,9 +374,8 @@ public class App {
 		btnActualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				 int selectedRow = tableProductos.getSelectedRow();
-			        if (selectedRow == -1) {
-			            JOptionPane.showMessageDialog(null, "Seleccione un producto para actualizar");
-			        } else {
+			      
+		try {
 			        	int id = (int) tableProductos.getValueAt(selectedRow, 0);
 
 			            String nombre = txtNombre.getText();
@@ -390,11 +395,16 @@ public class App {
 			            tableProductos.setValueAt(nombre, selectedRow, 1);
 			            tableProductos.setValueAt(precio, selectedRow, 2);
 			            tableProductos.setValueAt(existencias, selectedRow, 3);
-			            String nombreCategoria = (String) comboBoxCategoria.getSelectedItem();
-			            tableProductos.setValueAt(nombreCategoria, selectedRow, 4);
+			            tableProductos.setValueAt(indice, selectedRow, 4);
 			           
+			            JOptionPane.showMessageDialog(null,  "Producto actualizado correctamente");
+			        }catch(ArrayIndexOutOfBoundsException e1) {
+			        	 JOptionPane.showMessageDialog(null,  "No se ha seleccionado ninguna casilla o no hay ningun producto");
+			        
 			        }
-			    }
+		
+			        }
+			    
 			
 		});
 		btnActualizar.setBackground(new Color(245, 222, 179));
@@ -448,6 +458,8 @@ public class App {
 		comboBoxCategoria.setBounds(187, 422, 215, 19);
 		frameAlmacen.getContentPane().add(comboBoxCategoria);
 		
+	
+		
 		tableProductos.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -463,5 +475,5 @@ public class App {
 	});
 	
 }
-
 }
+
