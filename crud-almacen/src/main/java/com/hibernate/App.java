@@ -190,16 +190,19 @@ public class App {
 		JRadioButton rdbtnMostrarTodos = new JRadioButton("Mostrar todos los productos",true);
 		rdbtnMostrarTodos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (modelTabla.getRowCount() == 0) {
-				    JOptionPane.showMessageDialog(frameAlmacen, "La tabla está vacía");
-				}else{
+				
 				modelTabla.setRowCount(0);
 				List<Producto> selectProducto = productoDAO.selectAllProductos();
+				if(selectProducto.isEmpty())
+				{
+					JOptionPane.showMessageDialog(null, "No hay productos");
+				}
 				for (Producto pr : selectProducto) {
 				    Object[] fila = { pr.getIdProducto(), pr.getNombre() , pr.getPrecio() , pr.getExistencias() , pr.getCategoria().getIdCategoria()};
 				    modelTabla.addRow(fila);
+				    modelTabla.fireTableDataChanged();
 				}
-				}
+				
 			}
 		});
 		rdbtnMostrarTodos.setBackground(new Color(102, 204, 153));
@@ -217,19 +220,26 @@ public class App {
             
 				if(!comboBoxSeleccionarCategoria.isEnabled()) {
 					List<Producto> selectProducto = productoDAO.selectAllProductos();
+					
 					for (Producto pr : selectProducto) {
 					    Object[] fila = { pr.getIdProducto(), pr.getNombre() , pr.getPrecio() , pr.getExistencias() , pr.getCategoria().getIdCategoria()};
 					    modelTabla.addRow(fila);
+					    modelTabla.fireTableDataChanged();
 					}
 					
 				}else {
 				int indice = comboBoxSeleccionarCategoria.getSelectedIndex()+1;
 				Categoria categoria = categoriaDAO.selectCategoriaById(indice);
 				List<Producto> selectProducto = productoDAO.selectProductoByCategoria(categoria);
+				if(selectProducto.isEmpty())
+				{
+					JOptionPane.showMessageDialog(null, "No hay productos en esa categoria");
+				}
 				for (Producto pr : selectProducto) {
 					Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(),
 							pr.getCategoria().getIdCategoria() };
 					modelTabla.addRow(fila);
+					  modelTabla.fireTableDataChanged();
 				}
 				}
 
@@ -254,15 +264,17 @@ public class App {
 		JRadioButton rdbtnMostrarProductosCategoria = new JRadioButton("Mostrar productos por categoría");
 		rdbtnMostrarProductosCategoria.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
-				if (modelTabla.getRowCount() == 0) {
-				    JOptionPane.showMessageDialog(null, "La tabla está vacía");
-				}else{
+				
 				if(rdbtnMostrarProductosCategoria.isSelected()) {
 					modelTabla.setRowCount(0);
 					comboBoxSeleccionarCategoria.setEnabled(true);
 					int indice = comboBoxSeleccionarCategoria.getSelectedIndex()+1;
 					Categoria categoria = categoriaDAO.selectCategoriaById(indice);
 					List<Producto> selectProducto = productoDAO.selectProductoByCategoria(categoria);
+					if(selectProducto.isEmpty())
+					{
+						JOptionPane.showMessageDialog(null, "No hay productos en esa categoria");
+					}
 					for (Producto pr : selectProducto) {
 						Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(),
 								pr.getCategoria().getIdCategoria() };
@@ -272,7 +284,7 @@ public class App {
 					comboBoxSeleccionarCategoria.setEnabled(false);
 				}
 				}
-			}
+			
 		});
 		
 		rdbtnMostrarProductosCategoria.setBackground(new Color(102, 204, 153));
@@ -283,18 +295,24 @@ public class App {
 		JRadioButton rdbtnMostrarProductosSinUnidades = new JRadioButton("Mostrar productos de los que ya no quede unidades");
 		rdbtnMostrarProductosSinUnidades.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		        if (modelTabla.getRowCount() == 0) {
-		            JOptionPane.showMessageDialog(null, "La tabla está vacía");
-		        } else {
+		 
 		            modelTabla.setRowCount(0);
 		            List<Producto> selectProducto = productoDAO.selectProductosSinStock();
+		            if(selectProducto.isEmpty())
+					{
+						JOptionPane.showMessageDialog(null, "No hay productos sin  stock");
+					}
 		            for (Producto pr : selectProducto) {
 		                Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), pr.getCategoria().getIdCategoria() };
 		                modelTabla.addRow(fila);
+		                modelTabla.fireTableDataChanged();
+		                
 		            }
 		        }
-		    }
+		    
+		    
 		});
+		
 		rdbtnMostrarProductosSinUnidades.setBackground(new Color(102, 204, 153));
 		rdbtnMostrarProductosSinUnidades.setFont(new Font("Dialog", Font.BOLD, 15));
 		rdbtnMostrarProductosSinUnidades.setBounds(42, 623, 495, 23);
@@ -315,6 +333,7 @@ public class App {
 			    
 			    int indice = comboBoxCategoria.getSelectedIndex()+1;
 			    Categoria categoria =categoriaDAO.selectCategoriaById(indice);
+			    String nombreCategoria = (String) comboBoxCategoria.getSelectedItem();
 			    int precio = Integer.parseInt(txtPrecio.getText());
 			    int existencias = Integer.parseInt(txtStock.getText());
 			    Producto producto1 = new Producto(nombre, precio, existencias, categoria);
@@ -322,7 +341,7 @@ public class App {
 			    modelTabla.setRowCount(0);
 			    List<Producto> productoSelect = productoDAO.selectAllProductos();
 			    for (Producto pr : productoSelect) {
-			        Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), pr.getCategoria().getIdCategoria() };
+			        Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), nombreCategoria };
 			        modelTabla.addRow(fila);
 			    }
 			    JOptionPane.showMessageDialog(null, "Producto añadido");
@@ -346,6 +365,38 @@ public class App {
 		
 		
 		JButton btnActualizar = new JButton("Actualizar");
+		btnActualizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 int selectedRow = tableProductos.getSelectedRow();
+			        if (selectedRow == -1) {
+			            JOptionPane.showMessageDialog(null, "Seleccione un producto para actualizar");
+			        } else {
+			        	int id = (int) tableProductos.getValueAt(selectedRow, 0);
+
+			            String nombre = txtNombre.getText();
+			            int indice = comboBoxCategoria.getSelectedIndex()+1;
+			            Categoria categoria =categoriaDAO.selectCategoriaById(indice);
+			            int precio = Integer.parseInt(txtPrecio.getText());
+			            
+			            int existencias = Integer.parseInt(txtStock.getText());
+			            Producto producto = productoDAO.selectProductoById(id);
+			            
+			            producto.setNombre(nombre);
+			            producto.setCategoria(categoria);
+			            producto.setPrecio(precio);
+			            producto.setExistencias(existencias);
+			           
+			            productoDAO.updateProducto(producto);
+			            tableProductos.setValueAt(nombre, selectedRow, 1);
+			            tableProductos.setValueAt(precio, selectedRow, 2);
+			            tableProductos.setValueAt(existencias, selectedRow, 3);
+			            String nombreCategoria = (String) comboBoxCategoria.getSelectedItem();
+			            tableProductos.setValueAt(nombreCategoria, selectedRow, 4);
+			           
+			        }
+			    }
+			
+		});
 		btnActualizar.setBackground(new Color(245, 222, 179));
 		btnActualizar.setBounds(256, 676, 151, 25);
 		
