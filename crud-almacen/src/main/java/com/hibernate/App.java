@@ -48,6 +48,10 @@ public class App {
 	static final int LONGITUD_BTN_BORRAR =20;
 	static final int ALTURA_BTN_BORRAR =20;
 	
+	static final int LONGITUD_IMAGEN_LOGO =50;
+	static final int ALTURA_IMAGEN_LOGO =50;
+
+
 
 	private JFrame frameAlmacen;
 	private JTable tableProductos;
@@ -90,7 +94,7 @@ public class App {
 		CategoriaDAO categoriaDAO = new CategoriaDAO ();
 		
 		frameAlmacen = new JFrame();
-		frameAlmacen.getContentPane().setBackground(new Color(152, 224, 181));
+		frameAlmacen.getContentPane().setBackground(new Color(51, 204, 204));
 		frameAlmacen.setBackground(UIManager.getColor("OptionPane.questionDialog.titlePane.background"));
 		frameAlmacen.setBounds(100, 100, 674, 763);
 		frameAlmacen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -100,7 +104,7 @@ public class App {
 		lblTitulo.setForeground(new Color(255, 153, 102));
 		lblTitulo.setBackground(new Color(0, 153, 153));
 		lblTitulo.setFont(new Font("Dialog", Font.BOLD | Font.ITALIC, 25));
-		lblTitulo.setBounds(162, 33, 403, 31);
+		lblTitulo.setBounds(168, 24, 318, 31);
 		frameAlmacen.getContentPane().add(lblTitulo);
 		
         DefaultTableModel modelTabla = new DefaultTableModel() {
@@ -187,12 +191,15 @@ public class App {
 		frameAlmacen.getContentPane().add(txtStock);
 		txtStock.setColumns(10);
 		
-		JLabel lblImagen = new JLabel();
-		lblImagen.setBounds(491, 428, 46, 14);
-		ImageIcon imagen = new ImageIcon(App.class.getResource("/imagenes/guardar.png"));
-		Image imagenRedimensionada4 = imagen.getImage().getScaledInstance(LONGITUD_BTN_GUARDAR, ALTURA_BTN_GUARDAR, java.awt.Image.SCALE_SMOOTH);
-		lblImagen.setIcon(new ImageIcon(imagenRedimensionada4));
-		frameAlmacen.getContentPane().add(lblImagen);
+		JLabel lblLogo = new JLabel();
+		lblLogo.setBounds(551, 6, 87, 59);
+		ImageIcon imagen = new ImageIcon(App.class.getResource("/imagenes/almacen.png"));
+		Image imagenRedimensionada4 = imagen.getImage().getScaledInstance(LONGITUD_IMAGEN_LOGO, ALTURA_IMAGEN_LOGO, java.awt.Image.SCALE_SMOOTH);
+		lblLogo.setIcon(new ImageIcon(imagenRedimensionada4));
+		frameAlmacen.getContentPane().add(lblLogo);
+		
+		
+	
 		
 		JRadioButton rdbtnMostrarTodos = new JRadioButton("Mostrar todos los productos",true);
 		rdbtnMostrarTodos.addActionListener(new ActionListener() {
@@ -212,7 +219,7 @@ public class App {
 				
 			}
 		});
-		rdbtnMostrarTodos.setBackground(new Color(152, 224, 181));
+		rdbtnMostrarTodos.setBackground(new Color(51, 204, 204));
 		rdbtnMostrarTodos.setFont(new Font("Dialog", Font.BOLD, 15));
 		rdbtnMostrarTodos.setBounds(42, 544, 284, 23);
 		
@@ -294,7 +301,7 @@ public class App {
 			
 		});
 		
-		rdbtnMostrarProductosCategoria.setBackground(new Color(152, 224, 181));
+		rdbtnMostrarProductosCategoria.setBackground(new Color(51, 204, 204));
 		rdbtnMostrarProductosCategoria.setFont(new Font("Dialog", Font.BOLD, 15));
 		rdbtnMostrarProductosCategoria.setBounds(42, 571, 324, 23);
 		frameAlmacen.getContentPane().add(rdbtnMostrarProductosCategoria);
@@ -320,7 +327,7 @@ public class App {
 		    
 		});
 		
-		rdbtnMostrarProductosSinUnidades.setBackground(new Color(152, 224, 181));
+		rdbtnMostrarProductosSinUnidades.setBackground(new Color(51, 204, 204));
 		rdbtnMostrarProductosSinUnidades.setFont(new Font("Dialog", Font.BOLD, 15));
 		rdbtnMostrarProductosSinUnidades.setBounds(42, 623, 495, 23);
 		frameAlmacen.getContentPane().add(rdbtnMostrarProductosSinUnidades);
