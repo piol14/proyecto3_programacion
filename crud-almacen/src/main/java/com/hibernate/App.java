@@ -191,12 +191,7 @@ public class App {
 		frameAlmacen.getContentPane().add(txtStock);
 		txtStock.setColumns(10);
 		
-		JLabel lblLogo = new JLabel();
-		lblLogo.setBounds(551, 6, 87, 59);
-		ImageIcon imagen = new ImageIcon(App.class.getResource("/imagenes/almacen.png"));
-		Image imagenRedimensionada4 = imagen.getImage().getScaledInstance(LONGITUD_IMAGEN_LOGO, ALTURA_IMAGEN_LOGO, java.awt.Image.SCALE_SMOOTH);
-		lblLogo.setIcon(new ImageIcon(imagenRedimensionada4));
-		frameAlmacen.getContentPane().add(lblLogo);
+		
 		
 		
 	
