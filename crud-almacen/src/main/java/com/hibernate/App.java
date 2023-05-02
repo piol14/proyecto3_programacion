@@ -308,7 +308,7 @@ public class App {
 		            List<Producto> selectProducto = productoDAO.selectProductosSinStock();
 		            if(selectProducto.isEmpty())
 					{
-						JOptionPane.showMessageDialog(null, "Esta seleccionado el radio button de productos sin stock, seleccione el boton mostrar todos");
+						JOptionPane.showMessageDialog(null, "No hay productos sin stock.");
 					}
 		            for (Producto pr : selectProducto) {
 		                Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), pr.getCategoria().getIdCategoria() };
