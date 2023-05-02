@@ -446,7 +446,9 @@ public class App {
 			        	 JOptionPane.showMessageDialog(null,  "No se ha seleccionado ninguna casilla o no hay ningun producto");
 			        
 			        }
-		
+			catch(NumberFormatException e1) {
+				   JOptionPane.showMessageDialog(null,  "¡Error hay casillas vacías o datos mal introducidos!");
+			}
 			        }
 			    
 			
