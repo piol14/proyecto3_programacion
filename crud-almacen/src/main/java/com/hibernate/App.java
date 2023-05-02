@@ -48,8 +48,7 @@ public class App {
 	static final int LONGITUD_BTN_BORRAR =20;
 	static final int ALTURA_BTN_BORRAR =20;
 	
-	static final int LONGITUD_IMAGEN_LOGO =50;
-	static final int ALTURA_IMAGEN_LOGO =50;
+	
 
 
 
@@ -95,7 +94,7 @@ public class App {
 		
 		frameAlmacen = new JFrame();
 		frameAlmacen.getContentPane().setBackground(new Color(51, 204, 204));
-		frameAlmacen.setBackground(UIManager.getColor("OptionPane.questionDialog.titlePane.background"));
+		frameAlmacen.setBackground(new Color(50, 204, 204));
 		frameAlmacen.setBounds(100, 100, 674, 763);
 		frameAlmacen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frameAlmacen.getContentPane().setLayout(null);
@@ -104,7 +103,7 @@ public class App {
 		lblTitulo.setForeground(new Color(255, 153, 102));
 		lblTitulo.setBackground(new Color(0, 153, 153));
 		lblTitulo.setFont(new Font("Dialog", Font.BOLD | Font.ITALIC, 25));
-		lblTitulo.setBounds(168, 24, 318, 31);
+		lblTitulo.setBounds(165, 12, 403, 31);
 		frameAlmacen.getContentPane().add(lblTitulo);
 		
         DefaultTableModel modelTabla = new DefaultTableModel() {
@@ -309,7 +308,7 @@ public class App {
 		            List<Producto> selectProducto = productoDAO.selectProductosSinStock();
 		            if(selectProducto.isEmpty())
 					{
-						JOptionPane.showMessageDialog(null, "No hay productos sin  stock");
+						JOptionPane.showMessageDialog(null, "Esta seleccionado el radio button de productos sin stock, seleccione el boton mostrar todos");
 					}
 		            for (Producto pr : selectProducto) {
 		                Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), pr.getCategoria().getIdCategoria() };
@@ -337,12 +336,15 @@ public class App {
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			    try {
+			    
+				
+				
+				try {
 				String nombre = txtNombre.getText();
 			    
 			    int indice = comboBoxCategoria.getSelectedIndex()+1;
 			    Categoria categoria =categoriaDAO.selectCategoriaById(indice);
-			    int precio = Integer.parseInt(txtPrecio.getText());
+			  double precio =Double.parseDouble(txtPrecio.getText());
 			    int existencias = Integer.parseInt(txtStock.getText());
 			    Producto producto1 = new Producto(nombre, precio, existencias, categoria);
 			    productoDAO.insertProducto(producto1);
@@ -358,9 +360,45 @@ public class App {
 				txtStock.setText("");
 				txtId.setText("");
 			    
+				if(rdbtnMostrarProductosSinUnidades.isSelected()) {
+					  modelTabla.setRowCount(0);
+			            List<Producto> selectProducto = productoDAO.selectProductosSinStock();
+			            if(selectProducto.isEmpty())
+						{
+							JOptionPane.showMessageDialog(null, "No hay productos sin  stock");
+						}
+			            for (Producto pr : selectProducto) {
+			                Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), pr.getCategoria().getIdCategoria() };
+			                modelTabla.addRow(fila);
+			                modelTabla.fireTableDataChanged();
+			                
+			            }
+			        
+			  
+				}else if(rdbtnMostrarProductosCategoria.isSelected()) {
+						modelTabla.setRowCount(0);
+						comboBoxSeleccionarCategoria.setEnabled(true);
+						int indice2 = comboBoxSeleccionarCategoria.getSelectedIndex()+1;
+						Categoria categoria2 = categoriaDAO.selectCategoriaById(indice2);
+						List<Producto> selectProducto = productoDAO.selectProductoByCategoria(categoria2);
+						if(selectProducto.isEmpty())
+						{
+							JOptionPane.showMessageDialog(null, "No hay productos en esa categoria");
+						}
+						for (Producto pr : selectProducto) {
+							Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(),
+									pr.getCategoria().getIdCategoria() };
+							modelTabla.addRow(fila);
+						}
+					}else {
+						comboBoxSeleccionarCategoria.setEnabled(false);
+					}
+				
+					
 			}catch(NumberFormatException e1) {
 				   JOptionPane.showMessageDialog(null,  "¡Error hay casillas vacías o datos mal introducidos!");
 			}
+				
 			}
 		});
 		btnGuardar.setBackground(new Color(245, 222, 179));
@@ -383,11 +421,11 @@ public class App {
 			            String nombre = txtNombre.getText();
 			            int indice = comboBoxCategoria.getSelectedIndex()+1;
 			            Categoria categoria =categoriaDAO.selectCategoriaById(indice);
-			            int precio = Integer.parseInt(txtPrecio.getText());
+			            double precio = Double.parseDouble(txtPrecio.getText());
 			            
 			            int existencias = Integer.parseInt(txtStock.getText());
 			            Producto producto = productoDAO.selectProductoById(id);
-			            
+			            JOptionPane.showMessageDialog(null,  "Producto actualizado correctamente");
 			            producto.setNombre(nombre);
 			            producto.setCategoria(categoria);
 			            producto.setPrecio(precio);
@@ -399,7 +437,11 @@ public class App {
 			            tableProductos.setValueAt(existencias, selectedRow, 3);
 			            tableProductos.setValueAt(indice, selectedRow, 4);
 			           
-			            JOptionPane.showMessageDialog(null,  "Producto actualizado correctamente");
+			            
+			            txtNombre.setText("");
+						txtPrecio.setText("");
+						txtStock.setText("");
+						txtId.setText("");
 			        }catch(ArrayIndexOutOfBoundsException e1) {
 			        	 JOptionPane.showMessageDialog(null,  "No se ha seleccionado ninguna casilla o no hay ningun producto");
 			        

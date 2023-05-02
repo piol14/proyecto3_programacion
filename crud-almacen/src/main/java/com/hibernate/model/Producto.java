@@ -22,7 +22,7 @@ public class Producto {
 	private String nombre;
 
 	@Column(name = "precio")
-	private int precio;
+	private double precio;
 
 	@Column(name = "existencias")
 	private int existencias;
@@ -35,7 +35,7 @@ public class Producto {
 		super();
 	}
 
-	public Producto(String nombre, int precio, int existencias, Categoria categoria) {
+	public Producto(String nombre, double precio, int existencias, Categoria categoria) {
 		
 		this.nombre = nombre;
 		this.precio = precio;
@@ -59,11 +59,11 @@ public class Producto {
 		this.nombre = nombre;
 	}
 
-	public int getPrecio() {
+	public double getPrecio() {
 		return precio;
 	}
 
-	public void setPrecio(int precio) {
+	public void setPrecio(double precio) {
 		this.precio = precio;
 	}
 
