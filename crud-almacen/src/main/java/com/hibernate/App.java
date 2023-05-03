@@ -498,6 +498,10 @@ public class App {
 		
 		JButton btnBorrar = new JButton("Borrar");
 		btnBorrar.addActionListener(new ActionListener() {
+			/**
+			 * Este evento borra el producto  seleccionando cuando le das al boton de borrar
+			 * @param arg0
+			 */
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					
@@ -543,6 +547,11 @@ public class App {
 		
 		tableProductos.addMouseListener(new MouseAdapter() {
 			@Override
+			/**
+			 * Este evento sirve para que cuando el usuario le de a una fila de la tabla 
+			 * se muestre en los text field 
+			 * @param e
+			 */
 			public void mouseClicked(MouseEvent e) {
 			    int índice = tableProductos.getSelectedRow();
 			    TableModel model = tableProductos.getModel();
