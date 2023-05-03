@@ -33,6 +33,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
 import java.util.List;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
@@ -48,18 +49,73 @@ public class App {
 	static final int LONGITUD_BTN_BORRAR =20;
 	static final int ALTURA_BTN_BORRAR =20;
 	
+	ProductoDAO productoDAO = new ProductoDAO ();
+	CategoriaDAO categoriaDAO = new CategoriaDAO ();
+	  
 	
-
-
-
 	private JFrame frameAlmacen;
 	private JTable tableProductos;
 	private JTextField txtId;
 	private JTextField txtNombre;
 	private JTextField txtPrecio;
 	private JTextField txtStock;
-	
+	 private static JComboBox comboBoxSeleccionarCategoria = new JComboBox();
 	ButtonGroup g1 = new ButtonGroup();
+	
+	
+	static LocalDate calcularCaducidad (int indice) {
+		    LocalDate	 hoy=LocalDate.now();
+		    LocalDate fechaCaducidad = null;
+		   
+		   switch(indice)
+		    {
+		    case 1:
+		    	fechaCaducidad = hoy;
+		    	 
+		    	break;
+		    case 2:
+		    	fechaCaducidad =hoy.plusYears(4);
+		    	break;
+		    case 3:
+		    	fechaCaducidad=hoy.plusDays(20);
+		    	break;
+		    case 4:
+		    	fechaCaducidad=hoy.plusDays(24);
+		    	break;
+		    case 5:
+		    	fechaCaducidad = hoy.plusMonths(7);
+		    	break;
+		    case 6:
+		    	fechaCaducidad=hoy.plusDays(3);
+		    	break;
+		    case 7:
+		    	fechaCaducidad=hoy.plusDays(4);
+		    	break;
+		    case 8:
+		    	fechaCaducidad=hoy.plusDays(2);
+		    	break;
+		    case 9:
+		    	fechaCaducidad=hoy.plusMonths(6);
+		    	break;
+		    case 10:
+		    	fechaCaducidad=hoy.plusMonths(6);
+		    	break;
+		    	
+		    }
+		return fechaCaducidad;
+		    
+	}
+		void borrarCaducidad (int indice) {
+			 TableModel model = tableProductos.getModel();
+		  LocalDate	 hoy=LocalDate.now();
+		  LocalDate fechaCaducidad = calcularCaducidad(indice);
+		    Producto pr= new Producto();
+		int idProducto= (int) model.getValueAt(indice, 0);
+			
+		if(hoy.isEqual(fechaCaducidad)) {
+			productoDAO.deleteProducto(idProducto);
+		}
+	}
 
 	/**
 	 * Launch the application.
@@ -73,7 +129,11 @@ public class App {
 			public void run() {
 				try {
 					App window = new App();
+					
+					int indice = comboBoxSeleccionarCategoria.getSelectedIndex()+1;
+					window.borrarCaducidad(indice);
 					window.frameAlmacen.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -93,13 +153,12 @@ public class App {
 	 */
 	private void initialize() {
 		
-		ProductoDAO productoDAO = new ProductoDAO ();
-		CategoriaDAO categoriaDAO = new CategoriaDAO ();
+		
 		
 		frameAlmacen = new JFrame();
 		frameAlmacen.getContentPane().setBackground(new Color(51, 204, 204));
 		frameAlmacen.setBackground(new Color(50, 204, 204));
-		frameAlmacen.setBounds(100, 100, 674, 763);
+		frameAlmacen.setBounds(100, 100, 921, 773);
 		frameAlmacen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frameAlmacen.getContentPane().setLayout(null);
 		
@@ -107,7 +166,7 @@ public class App {
 		lblTitulo.setForeground(new Color(255, 153, 102));
 		lblTitulo.setBackground(new Color(0, 153, 153));
 		lblTitulo.setFont(new Font("Dialog", Font.BOLD | Font.ITALIC, 25));
-		lblTitulo.setBounds(165, 12, 403, 31);
+		lblTitulo.setBounds(259, 12, 403, 31);
 		frameAlmacen.getContentPane().add(lblTitulo);
 		
         DefaultTableModel modelTabla = new DefaultTableModel() {
@@ -129,7 +188,7 @@ public class App {
 		modelTabla.addColumn("Precio");
 		modelTabla.addColumn("Existencias");
 		modelTabla.addColumn("Categoria");
-		
+		modelTabla.addColumn("Fecha de caducidad");
 		tableProductos = new JTable(modelTabla);
 		
 		tableProductos.setBounds(26, 251, 489, -159);
@@ -138,14 +197,14 @@ public class App {
 		
 		List<Producto> selectProducto = productoDAO.selectAllProductos();
 		for (Producto pr : selectProducto) {
-		    Object[] fila = { pr.getIdProducto(), pr.getNombre() , pr.getPrecio() , pr.getExistencias() , pr.getCategoria().getIdCategoria()};
+		    Object[] fila = { pr.getIdProducto(), pr.getNombre() , pr.getPrecio() , pr.getExistencias() , pr.getCategoria().getIdCategoria(),pr.getFecha_caducidad()};
 		    modelTabla.addRow(fila);
 		}
-		
 
+  
 		
 		JScrollPane scrollPaneProductos = new JScrollPane(tableProductos);
-		scrollPaneProductos.setBounds(32, 76, 606, 220);
+		scrollPaneProductos.setBounds(32, 76, 857, 220);
 		frameAlmacen.getContentPane().add(scrollPaneProductos);
 		
 		JLabel lblDatos = new JLabel("INTRODUCIR DATOS");
@@ -220,7 +279,7 @@ public class App {
 					JOptionPane.showMessageDialog(null, "No hay productos");
 				}
 				for (Producto pr : selectProducto) {
-				    Object[] fila = { pr.getIdProducto(), pr.getNombre() , pr.getPrecio() , pr.getExistencias() , pr.getCategoria().getIdCategoria()};
+				    Object[] fila = { pr.getIdProducto(), pr.getNombre() , pr.getPrecio() , pr.getExistencias() , pr.getCategoria().getIdCategoria(),pr.getFecha_caducidad() };
 				    modelTabla.addRow(fila);
 				    modelTabla.fireTableDataChanged();
 				}
@@ -233,7 +292,7 @@ public class App {
 		
 		frameAlmacen.getContentPane().add(rdbtnMostrarTodos);
 		
-		JComboBox comboBoxSeleccionarCategoria = new JComboBox();
+		
 
 		comboBoxSeleccionarCategoria.addActionListener(new ActionListener() {
 			/**
@@ -249,7 +308,7 @@ public class App {
 					List<Producto> selectProducto = productoDAO.selectAllProductos();
 					
 					for (Producto pr : selectProducto) {
-					    Object[] fila = { pr.getIdProducto(), pr.getNombre() , pr.getPrecio() , pr.getExistencias() , pr.getCategoria().getIdCategoria()};
+					    Object[] fila = { pr.getIdProducto(), pr.getNombre() , pr.getPrecio() , pr.getExistencias() , pr.getCategoria().getIdCategoria(),pr.getFecha_caducidad() };
 					    modelTabla.addRow(fila);
 					    modelTabla.fireTableDataChanged();
 					}
@@ -264,7 +323,7 @@ public class App {
 				}
 				for (Producto pr : selectProducto) {
 					Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(),
-							pr.getCategoria().getIdCategoria() };
+							pr.getCategoria().getIdCategoria(),pr.getFecha_caducidad() };
 					modelTabla.addRow(fila);
 					  modelTabla.fireTableDataChanged();
 				}
@@ -280,7 +339,7 @@ public class App {
 		  comboBoxSeleccionarCategoria.addItem(cg.getNombreCategoria());
 		}
 		
-		comboBoxSeleccionarCategoria.setBounds(408, 591, 215, 24);
+		comboBoxSeleccionarCategoria.setBounds(476, 591, 215, 24);
 		frameAlmacen.getContentPane().add(comboBoxSeleccionarCategoria);
 		
 		JLabel lblSeleccionarCategoria = new JLabel("Seleccionar Categoria");
@@ -307,7 +366,7 @@ public class App {
 					}
 					for (Producto pr : selectProducto) {
 						Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(),
-								pr.getCategoria().getIdCategoria() };
+								pr.getCategoria().getIdCategoria(),pr.getFecha_caducidad() };
 						modelTabla.addRow(fila);
 					}
 				}else {
@@ -336,7 +395,7 @@ public class App {
 						JOptionPane.showMessageDialog(null, "No hay productos sin stock.");
 					}
 		            for (Producto pr : selectProducto) {
-		                Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), pr.getCategoria().getIdCategoria() };
+		                Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), pr.getCategoria().getIdCategoria(),pr.getFecha_caducidad() };
 		                modelTabla.addRow(fila);
 		                modelTabla.fireTableDataChanged();
 		                
@@ -375,13 +434,19 @@ public class App {
 			    int indice = comboBoxCategoria.getSelectedIndex()+1;
 			    Categoria categoria =categoriaDAO.selectCategoriaById(indice);
 			  double precio =Double.parseDouble(txtPrecio.getText());
-			    int existencias = Integer.parseInt(txtStock.getText());
-			    Producto producto1 = new Producto(nombre, precio, existencias, categoria);
+			  int existencias = Integer.parseInt(txtStock.getText());
+			  
+			    
+			     LocalDate	  hoy=LocalDate.now();
+			     LocalDate fechaCaducidad = calcularCaducidad(indice);
+		 
+			  
+			    Producto producto1 = new Producto(nombre, precio, existencias, categoria,fechaCaducidad);
 			    productoDAO.insertProducto(producto1);
 			    modelTabla.setRowCount(0);
 			    List<Producto> productoSelect = productoDAO.selectAllProductos();
 			    for (Producto pr : productoSelect) {
-			        Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), pr.getCategoria().getIdCategoria() };
+			        Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), pr.getCategoria().getIdCategoria(),pr.getFecha_caducidad() };
 			        modelTabla.addRow(fila);
 			    }
 			    JOptionPane.showMessageDialog(null, "Producto añadido");
@@ -398,7 +463,7 @@ public class App {
 							JOptionPane.showMessageDialog(null, "No hay productos sin  stock");
 						}
 			            for (Producto pr : selectProducto) {
-			                Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), pr.getCategoria().getIdCategoria() };
+			                Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), pr.getCategoria().getIdCategoria(),pr.getFecha_caducidad()  };
 			                modelTabla.addRow(fila);
 			                modelTabla.fireTableDataChanged();
 			                
@@ -417,7 +482,7 @@ public class App {
 						}
 						for (Producto pr : selectProducto) {
 							Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(),
-									pr.getCategoria().getIdCategoria() };
+									pr.getCategoria().getIdCategoria(),pr.getFecha_caducidad()  };
 							modelTabla.addRow(fila);
 						}
 					}else {
@@ -489,7 +554,7 @@ public class App {
 			
 		});
 		btnActualizar.setBackground(new Color(245, 222, 179));
-		btnActualizar.setBounds(256, 676, 151, 25);
+		btnActualizar.setBounds(385, 676, 151, 25);
 		
 		ImageIcon imagenActualizar = new ImageIcon(App.class.getResource("/imagenes/actualizar.png"));
 		Image imagenRedimensionada2 = imagenActualizar.getImage().getScaledInstance(LONGITUD_BTN_ACTUALIZAR, ALTURA_BTN_ACTUALIZAR, java.awt.Image.SCALE_SMOOTH);
@@ -503,10 +568,14 @@ public class App {
 			 * @param arg0
 			 */
 			public void actionPerformed(ActionEvent arg0) {
+			
+				
 				try {
 					
 					int filaSeleccionada = tableProductos.getSelectedRow();
 					int idProducto = (int)tableProductos.getValueAt(filaSeleccionada, 0);
+					
+					
 					productoDAO.deleteProducto(idProducto);
 					
 					modelTabla.removeRow(filaSeleccionada);
@@ -523,7 +592,7 @@ public class App {
 			}
 		});
 		btnBorrar.setBackground(new Color(245, 222, 179));
-		btnBorrar.setBounds(517, 676, 121, 25);
+		btnBorrar.setBounds(768, 676, 121, 25);
 		
 		ImageIcon imagenBorrar = new ImageIcon(App.class.getResource("/imagenes/borrar.png"));
 		Image imagenRedimensionada3 = imagenBorrar.getImage().getScaledInstance(LONGITUD_BTN_BORRAR, ALTURA_BTN_BORRAR, java.awt.Image.SCALE_SMOOTH);
