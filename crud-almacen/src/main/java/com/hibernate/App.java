@@ -64,6 +64,10 @@ public class App {
 	/**
 	 * Launch the application.
 	 */
+	/**
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -109,6 +113,12 @@ public class App {
         DefaultTableModel modelTabla = new DefaultTableModel() {
         
         @Override
+        /**
+         * Este metodo sirve para que las celdas de la tabla no sean editables 
+         * @param filas: este parametro son las filas de la tabla
+         * @param columnas: las columnas de la tabla
+         * @return: false, asi no se pueden editar las celdas 
+         */
 		public boolean isCellEditable(int filas,int columnas) {
 			return false;
 		}
@@ -197,6 +207,10 @@ public class App {
 		
 		JRadioButton rdbtnMostrarTodos = new JRadioButton("Mostrar todos los productos",true);
 		rdbtnMostrarTodos.addActionListener(new ActionListener() {
+			/**
+			 * Esta funcion muestra todos los productos de la tabla cuando le das al radioButton: rdbtnMostrarTodos
+			 * @param arg0
+			 */
 			public void actionPerformed(ActionEvent arg0) {
 				
 				modelTabla.setRowCount(0);
@@ -222,6 +236,11 @@ public class App {
 		JComboBox comboBoxSeleccionarCategoria = new JComboBox();
 
 		comboBoxSeleccionarCategoria.addActionListener(new ActionListener() {
+			/**
+			 * Esta funcion muestra los productos por su categoria cuando selecciona una categoria 
+			 * del comboBox comboBoxSeleccionarCategoria
+			 * @param arg0
+			 */
 			public void actionPerformed(ActionEvent arg0) {
 				modelTabla.setRowCount(0);
 			
@@ -270,6 +289,9 @@ public class App {
 		frameAlmacen.getContentPane().add(lblSeleccionarCategoria);
 		
 		JRadioButton rdbtnMostrarProductosCategoria = new JRadioButton("Mostrar productos por categoría");
+		/**
+		 * Esta funcion habilita el comboBox comboBoxSeleccionarCategoria para que muestre segun la categoria
+		 */
 		rdbtnMostrarProductosCategoria.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				
@@ -302,6 +324,9 @@ public class App {
 		
 		JRadioButton rdbtnMostrarProductosSinUnidades = new JRadioButton("Mostrar productos de los que ya no quede unidades");
 		rdbtnMostrarProductosSinUnidades.addActionListener(new ActionListener() {
+			/**
+			 * Esta funcion muestra los productos sin stock al darle al radioButton rdbtnMostrarProductosSinUnidades 
+			 */
 		    public void actionPerformed(ActionEvent e) {
 		 
 		            modelTabla.setRowCount(0);
@@ -335,6 +360,11 @@ public class App {
 		
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
+			/**
+			 * Esta funcion inserta un producto cuando los datos estan introducidos correctamente, tras darle al boton guardar
+			 * 
+			 * @param arg0
+			 */
 			public void actionPerformed(ActionEvent arg0) {
 			    
 				
@@ -412,6 +442,11 @@ public class App {
 		
 		JButton btnActualizar = new JButton("Actualizar");
 		btnActualizar.addActionListener(new ActionListener() {
+			/**
+			 * Esta funcion actualiza un producto tras seleccionarlo, cambiar un valor de un textField o del
+			 * comboBox y despues se le da al boton Actualizar, si los datos estan introducidos correctamente
+			 * se actualiza, sino, sale un mensaje de error.
+			 */
 			public void actionPerformed(ActionEvent e) {
 				 int selectedRow = tableProductos.getSelectedRow();
 			      
