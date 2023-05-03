@@ -32,9 +32,10 @@ COLLATE = utf8mb4_unicode_ci;
 CREATE TABLE IF NOT EXISTS `almacen`.`producto` (
   `idproducto` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NOT NULL,
-  `precio` INT NOT NULL,
+  `precio` DECIMAL NOT NULL,
   `existencias` INT NOT NULL,
   `categoria_id` INT NOT NULL,
+  `fecha_caducidad` DATE NOT NULL,
   PRIMARY KEY (`idproducto`),
   INDEX `fk_producto_categoria_idx` (`categoria_id` ASC) VISIBLE,
   CONSTRAINT `fk_producto_categoria`
@@ -61,4 +62,5 @@ INSERT INTO `categoria` (`id`, `nombre`) VALUES
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
 
