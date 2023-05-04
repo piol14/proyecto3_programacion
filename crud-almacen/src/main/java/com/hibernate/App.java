@@ -59,13 +59,19 @@ public class App {
 	private JTextField txtNombre;
 	private JTextField txtPrecio;
 	private JTextField txtStock;
-	 private static JComboBox comboBoxSeleccionarCategoria = new JComboBox();
+	private static JComboBox comboBoxSeleccionarCategoria = new JComboBox();
 	ButtonGroup g1 = new ButtonGroup();
 	
 	
 	static LocalDate calcularCaducidad (int indice) {
-		    LocalDate	 hoy=LocalDate.now();
+		CategoriaDAO categoriaDAO = new CategoriaDAO ();
+		  
+		    LocalDate hoy=LocalDate.now();
 		    LocalDate fechaCaducidad = null;
+		    
+		    Categoria categoria = categoriaDAO.selectCategoriaById(indice);
+		    
+		   
 		   
 		   switch(indice)
 		    {
@@ -109,12 +115,16 @@ public class App {
 			 TableModel model = tableProductos.getModel();
 		  LocalDate	 hoy=LocalDate.now();
 		  LocalDate fechaCaducidad = calcularCaducidad(indice);
-		    Producto pr= new Producto();
-		int idProducto= (int) model.getValueAt(indice, 0);
+		    
+		  List<Producto> selectProducto = productoDAO.selectAllProductos();
+			for (Producto pr : selectProducto) {
+				if(hoy.isEqual(fechaCaducidad)) {
+				productoDAO.deleteProducto(pr.getIdProducto());
+				}
+			}
+
 			
-		if(hoy.isEqual(fechaCaducidad)) {
-			productoDAO.deleteProducto(idProducto);
-		}
+		
 	}
 
 	/**
@@ -130,7 +140,7 @@ public class App {
 				try {
 					App window = new App();
 					
-					int indice = comboBoxSeleccionarCategoria.getSelectedIndex()+1;
+				
 					window.borrarCaducidad(indice);
 					window.frameAlmacen.setVisible(true);
 					

@@ -1,5 +1,6 @@
 package com.hibernate.dao;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -121,4 +122,8 @@ public class ProductoDAO {
 		    }
 		    return productos;
 		}
+		
+		
+		
+		
 }
