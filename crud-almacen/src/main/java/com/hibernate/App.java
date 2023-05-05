@@ -49,8 +49,7 @@ public class App {
 	static final int LONGITUD_BTN_BORRAR =20;
 	static final int ALTURA_BTN_BORRAR =20;
 	
-	ProductoDAO productoDAO = new ProductoDAO ();
-	CategoriaDAO categoriaDAO = new CategoriaDAO ();
+
 	  
 	
 	private JFrame frameAlmacen;
@@ -59,73 +58,10 @@ public class App {
 	private JTextField txtNombre;
 	private JTextField txtPrecio;
 	private JTextField txtStock;
-	private static JComboBox comboBoxSeleccionarCategoria = new JComboBox();
+	
 	ButtonGroup g1 = new ButtonGroup();
 	
 	
-	static LocalDate calcularCaducidad (int indice) {
-		CategoriaDAO categoriaDAO = new CategoriaDAO ();
-		  
-		    LocalDate hoy=LocalDate.now();
-		    LocalDate fechaCaducidad = null;
-		    
-		    Categoria categoria = categoriaDAO.selectCategoriaById(indice);
-		    
-		   
-		   
-		   switch(indice)
-		    {
-		    case 1:
-		    	fechaCaducidad = hoy;
-		    	 
-		    	break;
-		    case 2:
-		    	fechaCaducidad =hoy.plusYears(4);
-		    	break;
-		    case 3:
-		    	fechaCaducidad=hoy.plusDays(20);
-		    	break;
-		    case 4:
-		    	fechaCaducidad=hoy.plusDays(24);
-		    	break;
-		    case 5:
-		    	fechaCaducidad = hoy.plusMonths(7);
-		    	break;
-		    case 6:
-		    	fechaCaducidad=hoy.plusDays(3);
-		    	break;
-		    case 7:
-		    	fechaCaducidad=hoy.plusDays(4);
-		    	break;
-		    case 8:
-		    	fechaCaducidad=hoy.plusDays(2);
-		    	break;
-		    case 9:
-		    	fechaCaducidad=hoy.plusMonths(6);
-		    	break;
-		    case 10:
-		    	fechaCaducidad=hoy.plusMonths(6);
-		    	break;
-		    	
-		    }
-		return fechaCaducidad;
-		    
-	}
-		void borrarCaducidad (int indice) {
-			 TableModel model = tableProductos.getModel();
-		  LocalDate	 hoy=LocalDate.now();
-		  LocalDate fechaCaducidad = calcularCaducidad(indice);
-		    
-		  List<Producto> selectProducto = productoDAO.selectAllProductos();
-			for (Producto pr : selectProducto) {
-				if(hoy.isEqual(fechaCaducidad)) {
-				productoDAO.deleteProducto(pr.getIdProducto());
-				}
-			}
-
-			
-		
-	}
 
 	/**
 	 * Launch the application.
@@ -139,9 +75,6 @@ public class App {
 			public void run() {
 				try {
 					App window = new App();
-					
-				
-					window.borrarCaducidad(indice);
 					window.frameAlmacen.setVisible(true);
 					
 				} catch (Exception e) {
@@ -164,6 +97,11 @@ public class App {
 	private void initialize() {
 		
 		
+		ProductoDAO productoDAO = new ProductoDAO ();
+		CategoriaDAO categoriaDAO = new CategoriaDAO ();
+		
+		JComboBox comboBoxSeleccionarCategoria = new JComboBox();
+		JComboBox comboBoxCategoria = new JComboBox();
 		
 		frameAlmacen = new JFrame();
 		frameAlmacen.getContentPane().setBackground(new Color(51, 204, 204));
@@ -198,7 +136,7 @@ public class App {
 		modelTabla.addColumn("Precio");
 		modelTabla.addColumn("Existencias");
 		modelTabla.addColumn("Categoria");
-		modelTabla.addColumn("Fecha de caducidad");
+	
 		tableProductos = new JTable(modelTabla);
 		
 		tableProductos.setBounds(26, 251, 489, -159);
@@ -207,7 +145,7 @@ public class App {
 		
 		List<Producto> selectProducto = productoDAO.selectAllProductos();
 		for (Producto pr : selectProducto) {
-		    Object[] fila = { pr.getIdProducto(), pr.getNombre() , pr.getPrecio() , pr.getExistencias() , pr.getCategoria().getIdCategoria(),pr.getFecha_caducidad()};
+		    Object[] fila = { pr.getIdProducto(), pr.getNombre() , pr.getPrecio() , pr.getExistencias() , pr.getCategoria().getIdCategoria()};
 		    modelTabla.addRow(fila);
 		}
 
@@ -289,7 +227,7 @@ public class App {
 					JOptionPane.showMessageDialog(null, "No hay productos");
 				}
 				for (Producto pr : selectProducto) {
-				    Object[] fila = { pr.getIdProducto(), pr.getNombre() , pr.getPrecio() , pr.getExistencias() , pr.getCategoria().getIdCategoria(),pr.getFecha_caducidad() };
+				    Object[] fila = { pr.getIdProducto(), pr.getNombre() , pr.getPrecio() , pr.getExistencias() , pr.getCategoria().getIdCategoria()};
 				    modelTabla.addRow(fila);
 				    modelTabla.fireTableDataChanged();
 				}
@@ -318,7 +256,7 @@ public class App {
 					List<Producto> selectProducto = productoDAO.selectAllProductos();
 					
 					for (Producto pr : selectProducto) {
-					    Object[] fila = { pr.getIdProducto(), pr.getNombre() , pr.getPrecio() , pr.getExistencias() , pr.getCategoria().getIdCategoria(),pr.getFecha_caducidad() };
+					    Object[] fila = { pr.getIdProducto(), pr.getNombre() , pr.getPrecio() , pr.getExistencias() , pr.getCategoria().getIdCategoria()};
 					    modelTabla.addRow(fila);
 					    modelTabla.fireTableDataChanged();
 					}
@@ -333,7 +271,7 @@ public class App {
 				}
 				for (Producto pr : selectProducto) {
 					Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(),
-							pr.getCategoria().getIdCategoria(),pr.getFecha_caducidad() };
+							pr.getCategoria().getIdCategoria() };
 					modelTabla.addRow(fila);
 					  modelTabla.fireTableDataChanged();
 				}
@@ -376,7 +314,7 @@ public class App {
 					}
 					for (Producto pr : selectProducto) {
 						Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(),
-								pr.getCategoria().getIdCategoria(),pr.getFecha_caducidad() };
+								pr.getCategoria().getIdCategoria()};
 						modelTabla.addRow(fila);
 					}
 				}else {
@@ -405,7 +343,7 @@ public class App {
 						JOptionPane.showMessageDialog(null, "No hay productos sin stock.");
 					}
 		            for (Producto pr : selectProducto) {
-		                Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), pr.getCategoria().getIdCategoria(),pr.getFecha_caducidad() };
+		                Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), pr.getCategoria().getIdCategoria()};
 		                modelTabla.addRow(fila);
 		                modelTabla.fireTableDataChanged();
 		                
@@ -424,7 +362,7 @@ public class App {
 		g1.add(rdbtnMostrarTodos);
 		
 		
-		JComboBox comboBoxCategoria = new JComboBox();
+	
 		
 		
 		JButton btnGuardar = new JButton("Guardar");
@@ -446,17 +384,15 @@ public class App {
 			  double precio =Double.parseDouble(txtPrecio.getText());
 			  int existencias = Integer.parseInt(txtStock.getText());
 			  
-			    
-			     LocalDate	  hoy=LocalDate.now();
-			     LocalDate fechaCaducidad = calcularCaducidad(indice);
+		
 		 
 			  
-			    Producto producto1 = new Producto(nombre, precio, existencias, categoria,fechaCaducidad);
+			    Producto producto1 = new Producto(nombre, precio, existencias, categoria);
 			    productoDAO.insertProducto(producto1);
 			    modelTabla.setRowCount(0);
 			    List<Producto> productoSelect = productoDAO.selectAllProductos();
 			    for (Producto pr : productoSelect) {
-			        Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), pr.getCategoria().getIdCategoria(),pr.getFecha_caducidad() };
+			        Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), pr.getCategoria().getIdCategoria()};
 			        modelTabla.addRow(fila);
 			    }
 			    JOptionPane.showMessageDialog(null, "Producto añadido");
@@ -473,7 +409,7 @@ public class App {
 							JOptionPane.showMessageDialog(null, "No hay productos sin  stock");
 						}
 			            for (Producto pr : selectProducto) {
-			                Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), pr.getCategoria().getIdCategoria(),pr.getFecha_caducidad()  };
+			                Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(), pr.getCategoria().getIdCategoria() };
 			                modelTabla.addRow(fila);
 			                modelTabla.fireTableDataChanged();
 			                
@@ -492,7 +428,7 @@ public class App {
 						}
 						for (Producto pr : selectProducto) {
 							Object[] fila = { pr.getIdProducto(), pr.getNombre(), pr.getPrecio(), pr.getExistencias(),
-									pr.getCategoria().getIdCategoria(),pr.getFecha_caducidad()  };
+									pr.getCategoria().getIdCategoria() };
 							modelTabla.addRow(fila);
 						}
 					}else {

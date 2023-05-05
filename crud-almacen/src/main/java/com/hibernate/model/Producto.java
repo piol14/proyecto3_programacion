@@ -28,8 +28,8 @@ public class Producto {
 
 	@Column(name = "existencias")
 	private int existencias;
-	@Column(name ="fecha_de_caducidad")
-	private LocalDate fecha_caducidad;
+	
+	
 	@ManyToOne
 	@JoinColumn(name = "categoria_id")
 	private Categoria categoria;
@@ -38,22 +38,15 @@ public class Producto {
 		super();
 	}
 
-	public Producto(String nombre, double precio, int existencias, Categoria categoria,LocalDate fecha_caducidad) {
+	public Producto(String nombre, double precio, int existencias, Categoria categoria) {
 		
 		this.nombre = nombre;
 		this.precio = precio;
 		this.existencias = existencias;
 		this.categoria = categoria;
-		this.fecha_caducidad= fecha_caducidad;
+
 	}
 
-	 public LocalDate getFecha_caducidad() {
-		return fecha_caducidad;
-	}
-
-	 public void setFecha_caducidad(LocalDate fecha_caducidad) {
-		this.fecha_caducidad = fecha_caducidad;
-	}
 
 	public int getIdProducto() {
 		return idProducto;
