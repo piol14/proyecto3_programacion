@@ -57,7 +57,7 @@ public class App {
 	private JTextField txtId;
 	private JTextField txtNombre;
 	private JTextField txtPrecio;
-	private JTextField txtStock;
+	private JTextField txtExistencias;
 	
 	ButtonGroup g1 = new ButtonGroup();
 	
@@ -202,10 +202,10 @@ public class App {
 		frameAlmacen.getContentPane().add(txtPrecio);
 		txtPrecio.setColumns(10);
 		
-		txtStock = new JTextField();
-		txtStock.setBounds(187, 475, 151, 19);
-		frameAlmacen.getContentPane().add(txtStock);
-		txtStock.setColumns(10);
+		txtExistencias = new JTextField();
+		txtExistencias.setBounds(187, 475, 151, 19);
+		frameAlmacen.getContentPane().add(txtExistencias);
+		txtExistencias.setColumns(10);
 		
 		
 		
@@ -382,7 +382,7 @@ public class App {
 			    int indice = comboBoxCategoria.getSelectedIndex()+1;
 			    Categoria categoria =categoriaDAO.selectCategoriaById(indice);
 			  double precio =Double.parseDouble(txtPrecio.getText());
-			  int existencias = Integer.parseInt(txtStock.getText());
+			  int existencias = Integer.parseInt(txtExistencias.getText());
 			  
 		
 		 
@@ -398,7 +398,7 @@ public class App {
 			    JOptionPane.showMessageDialog(null, "Producto añadido");
 			    txtNombre.setText("");
 				txtPrecio.setText("");
-				txtStock.setText("");
+				txtExistencias.setText("");
 				txtId.setText("");
 			    
 				if(rdbtnMostrarProductosSinUnidades.isSelected()) {
@@ -462,6 +462,8 @@ public class App {
 				 int selectedRow = tableProductos.getSelectedRow();
 			      
 		try {
+			
+			
 			        	int id = (int) tableProductos.getValueAt(selectedRow, 0);
 
 			            String nombre = txtNombre.getText();
@@ -469,8 +471,14 @@ public class App {
 			            Categoria categoria =categoriaDAO.selectCategoriaById(indice);
 			            double precio = Double.parseDouble(txtPrecio.getText());
 			            
-			            int existencias = Integer.parseInt(txtStock.getText());
+			            int existencias = Integer.parseInt(txtExistencias.getText());
 			            Producto producto = productoDAO.selectProductoById(id);
+			            if(txtNombre.getText().isEmpty())
+			            {
+			            	 JOptionPane.showMessageDialog(null,  "¡Error hay casillas vacías o datos mal introducidos!");
+			            }
+			            else
+			            {
 			            JOptionPane.showMessageDialog(null,  "Producto actualizado correctamente");
 			            producto.setNombre(nombre);
 			            producto.setCategoria(categoria);
@@ -486,8 +494,9 @@ public class App {
 			            
 			            txtNombre.setText("");
 						txtPrecio.setText("");
-						txtStock.setText("");
+						txtExistencias.setText("");
 						txtId.setText("");
+			            }
 			        }catch(ArrayIndexOutOfBoundsException e1) {
 			        	 JOptionPane.showMessageDialog(null,  "No se ha seleccionado ninguna casilla o no hay ningun producto");
 			        
@@ -528,7 +537,7 @@ public class App {
 					JOptionPane.showMessageDialog(null, "Producto borrado correctamente");
 					txtNombre.setText("");
 					txtPrecio.setText("");
-					txtStock.setText("");
+					txtExistencias.setText("");
 					txtId.setText("");
 					
 					
@@ -573,7 +582,7 @@ public class App {
 			    txtId.setText(model.getValueAt(índice, 0).toString());
 			    txtNombre.setText(model.getValueAt(índice, 1).toString());
 			    txtPrecio.setText(model.getValueAt(índice, 2).toString());
-			    txtStock.setText(model.getValueAt(índice, 3).toString());
+			    txtExistencias.setText(model.getValueAt(índice, 3).toString());
 			    Object valorSeleccionado = model.getValueAt(índice, 4); // obtiene el valor de la columna de la categoría
 			    comboBoxCategoria.setSelectedIndex((int) valorSeleccionado-1);
 			}
