@@ -16,7 +16,7 @@ public class ProductoDAO {
 
 	
 	/**
-	 * Funcion publica de la clase producto que con la devuelve el objeto producto
+	 * Funcion publica de la clase producto que con la  id devuelve el objeto producto
 	 * 
 	 * @param id la id que le pasa el usuario 
 	 * @return devuelve el objeto producto de esa id 
