@@ -15,7 +15,12 @@ import com.hibernate.util.HibernateUtil;
 public class ProductoDAO {
 
 	
-	// Selección simple
+	/**
+	 * Funcion publica de la clase producto que con la devuelve el objeto producto
+	 * 
+	 * @param id la id que le pasa el usuario 
+	 * @return devuelve el objeto producto de esa id 
+	 */
 		public Producto selectProductoById(int id) {
 			Transaction transaction = null;
 			Producto pr = null;
@@ -31,7 +36,13 @@ public class ProductoDAO {
 			return pr;
 		}
 
-		//Insercion
+		/**
+		 * Metodo publico de la clase producto que inserta un producto en la base
+		 * de datos 
+		 * @param pr el objeto producto pasado por el programa principal con los atributos
+		 * introducidos por el usuario
+		 * No devuelve nada porque es void 
+		 */
 		
 		public void insertProducto(Producto pr) {
 			Transaction transaction = null;
@@ -45,7 +56,13 @@ public class ProductoDAO {
 				}
 			}
 		}
-	//Actualizacion
+		/**
+		 * Metodo publico de la clase producto que actualiza  un producto en la base
+		 * de datos 
+		 * @param pr el objeto producto pasado por el programa principal con los atributos
+		 * introducidos por el usuario
+		 * No devuelve nada porque es void 
+		 */
 		
 		public void updateProducto(Producto pr) {
 			Transaction transaction = null;
@@ -60,7 +77,12 @@ public class ProductoDAO {
 			}
 		}
 
-		//Eliminar
+		/**
+		 * Metodo publico de la clase producto que borra  un producto en la base
+		 * de datos 
+		 * @param id la id del producto que queremos eliminar 
+		 * No devuelve nada porque es void 
+		 */
 		public void deleteProducto(int id) {
 			Transaction transaction = null;
 			Producto pr = null;
@@ -76,7 +98,10 @@ public class ProductoDAO {
 			}
 		}
 		
-		//Seleccion multiple
+		/**
+		 * Funcion publica de tipo Lista producto que selecciona todos los productos
+		 * @return devuelve una lista con todos los productos 
+		 */
 		public List<Producto> selectAllProductos() {
 			Transaction transaction = null;
 			List<Producto> productos = null;
@@ -91,7 +116,12 @@ public class ProductoDAO {
 			}
 			return productos;
 		}
-		
+		/**
+		 * Funcion publica de la clase objeto que pasandole un objeto de tipo categoria selecciona los 
+		 * objeto con esa categoria 
+		 * @param categoria la categoria seleccionada por el usuario 
+		 * @return devuelve los productos con esa categoria 
+		 */
 		public List<Producto> selectProductoByCategoria (Categoria categoria) {
 			Transaction transaction = null;
 			List<Producto> productos= null;
@@ -107,7 +137,10 @@ public class ProductoDAO {
 			}
 			return productos;
 		}
-
+/** 
+ * Funcion publica de la clase producto que selecciona los productos sin stock
+ * @return devuelve la lista de producto de los objetos sin stock 
+ */
 		public List<Producto> selectProductosSinStock() {
 		    Transaction transaction = null;
 		    List<Producto> productos = null;

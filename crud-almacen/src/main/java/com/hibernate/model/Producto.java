@@ -10,7 +10,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-
+/**
+ * Clase producto: clase para definir los atributos del producto (idproducto,nombre,precio,existencias
+ * categoria_id) el constructor y los getters y los setters 
+ * 
+ *
+ */
 @Entity
 @Table(name = "producto")
 public class Producto {

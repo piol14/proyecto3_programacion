@@ -479,6 +479,8 @@ public class App {
 			            }
 			            else
 			            {
+			            
+			          
 			            JOptionPane.showMessageDialog(null,  "Producto actualizado correctamente");
 			            producto.setNombre(nombre);
 			            producto.setCategoria(categoria);

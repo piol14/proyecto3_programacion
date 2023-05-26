@@ -6,7 +6,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
+/**
+ * Clase categoria : sirve para los definir los atributos (id, nombre), el contructor y los getter y los setters
+ * de cada atributo
+ * 
+ *
+ */
 @Entity
 @Table(name = "categoria")
 

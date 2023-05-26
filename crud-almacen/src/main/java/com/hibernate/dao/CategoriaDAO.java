@@ -11,7 +11,11 @@ import com.hibernate.util.HibernateUtil;
 
 public class CategoriaDAO {
 	
-	//Seleccion multiple
+	/**
+	 * Metodo selectAllCategoria de tipo publico. Es una seleccion multiple de la 
+	 * clase categoria 
+	 * @return  devuelve una lista con las id yt el nombre de todas las categorias
+	 */
 			public List<Categoria> selectAllCategoria() {
 				Transaction transaction = null;
 				List<Categoria> categorias = null;
@@ -26,6 +30,12 @@ public class CategoriaDAO {
 				}
 				return categorias;
 			}
+			/**
+			 * Funcion publica de la clase categoria  que con la id devuelve el nombre de 
+			 * la categoria con esa id
+			 * @param id que pasa el usuario 
+			 * @return el objeto de la categoria de esa id
+			 */
 			public Categoria selectCategoriaById(int id) {
 				Transaction transaction = null;
 			Categoria cg = null;
